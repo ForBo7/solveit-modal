@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "solveit-modal"
+  site-url: "https://ForBo7.github.io/solveit-modal"
+  description: "Give SolveIt Modal GPU access"
+  repo-branch: main
+  repo-url: "https://github.com/ForBo7/solveit-modal"

@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solveit-modal"
+dynamic = ["version"]
+description = "Give SolveIt Modal GPU access"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "Salman Naqvi", email = "salmanaqvi+github@icloud.com"}]
+keywords = ['nbdev']
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/ForBo7/solveit-modal"
+Documentation = "https://ForBo7.github.io/solveit-modal/"
+
+[project.entry-points.nbdev]
+solveit_modal = "solveit_modal._modidx:d"
+
+[tool.setuptools.dynamic]
+version = {attr = "solveit_modal.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["solveit_modal"]
+
+[tool.nbdev]
