@@ -15,7 +15,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = []
+dependencies = [
+    "fastcore",
+    "modal"
+]
 
 [project.urls]
 Repository = "https://github.com/ForBo7/solveit-modal"
