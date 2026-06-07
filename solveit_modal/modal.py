@@ -12,7 +12,7 @@ __all__ = ['mk_app', 'mk_img', 'get_apts', 'get_pips', 'get_secrets', 'mk_sandbo
 import modal
 
 # %% ../nbs/01_modal.ipynb #978005b2
-def mk_app(name: str        # App name to look up or create
+def mk_app(name:str='solveit-sandbox'        # App name to look up or create
            ) -> modal.App:
     "Look up a Modal App by name, creating it if missing."
     return modal.App.lookup(name, create_if_missing=True)
@@ -139,10 +139,10 @@ def verify_ssh(ssh: object  # SSH function returned by mk_ssh
     h, u, w = ssh('hostname; uname -srmo; whoami').splitlines()[:3]
     sys_name, ver, arch, os_name = u.split()
     gpu = ssh('nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || echo "no GPU"').strip()
-    print(f'System：  {sys_name}')
-    print(f'Hostname：{h}')
-    print(f'User：  {w}')
-    print(f'Kernel：  {ver}')
-    print(f'Architecture：  {arch}')
-    print(f'OS Type：{os_name}')
-    print(f'GPU：   {gpu}')
+    print(f'System: {sys_name}')
+    print(f'Hostname: {h}')
+    print(f'User: {w}')
+    print(f'Kernel: {ver}')
+    print(f'Architecture: {arch}')
+    print(f'OS Type: {os_name}')
+    print(f'GPU: {gpu}')

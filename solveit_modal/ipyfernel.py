@@ -29,3 +29,6 @@ def get_remote_python(ssh,                       # SSH caller from mk_ssh
     ) -> str:                                    # path to remote python
     "Return the path of Python on the remote machine."
     return ssh('which python3')
+
+# %% ../nbs/02_ipyfernel.ipynb #6b35bcb8
+from ipyfernel.core import *
