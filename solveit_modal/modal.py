@@ -65,14 +65,17 @@ def mk_sandbox(
     timeout:int        =600,        # auto-terminate after this many seconds
     gpu    :str|None    =None,      # GPU type (e.g. "T4", "A100") or None
     secrets:dict|None   =None,      # secrets dict (defaults to local solveit)
+    volumes:dict|None  =None,       # mount path → modal.Volume (defaults to /data solveit-volume)
 ) -> modal.Sandbox:
-    "Create a Modal Sandbox with optional GPU and SSH."
+    "Create a Modal Sandbox with optional GPU, SSH, and Volumes."
     if secrets is None: secrets = get_secrets()
+    if volumes is None: volumes = {"/data": modal.Volume.from_name("solveit-volume", create_if_missing=True)}
     print(f'⌛ creating sandbox…')
     sb = modal.Sandbox.create('sleep', 'infinity',
         app=app, image=img, timeout=timeout,
         unencrypted_ports=[22], gpu=gpu,
-        secrets=[modal.Secret.from_dict(secrets)])
+        secrets=[modal.Secret.from_dict(secrets)],
+        volumes=volumes)
     print('✔ sandbox ready')
     return sb
 
