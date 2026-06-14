@@ -9,8 +9,14 @@ __all__ = ['GPUEntry', 'GPU']
 
 # %% ../nbs/03_gpu.ipynb #6d5e354e
 class GPUEntry:
-    def __init__(self, tag, price, vram): self.tag, self.price, self.vram = tag, price, vram
-    def __repr__(self): return f'{self.tag} — ${self.price:.2f}/hr, {self.vram}GB'
+    def __init__(self,
+        tag:str,     # GPU tag, e.g. 'H100'
+        price:float, # Price per hour (USD)
+        vram:int,    # VRAM in GB
+    ) -> None: store_attr()
+    def __repr__(self) -> str: return f'{self.tag} — ${self.price:.2f}/hr, {self.vram}GB'
+    def _repr_html_(self) -> str: return f'<div style="background:#e8f4e8;padding:8px 12px;border-radius:6px;display:inline-block;font-family:monospace"><b>{self.tag}</b> · ${self.price:.2f}/hr · {self.vram}GB</div>'
+
 
 # %% ../nbs/03_gpu.ipynb #e4fbc570
 from datetime import date
@@ -20,55 +26,82 @@ class GPU:
     _source = 'https://modal.com/pricing'
     _updated = date(2026, 5, 22)
 
-    T4            = GPUEntry('T4',            0.59, 16)
-    L4            = GPUEntry('L4',            0.80, 24)
-    A10           = GPUEntry('A10',           1.10, 24)
-    L40S          = GPUEntry('L40S',          1.95, 48)
-    A100_40GB     = GPUEntry('A100-40GB',     2.10, 40)
-    A100_80GB     = GPUEntry('A100-80GB',     2.50, 80)
-    RTX_PRO_6000  = GPUEntry('RTX-PRO-6000',  3.03, 96)
-    H100          = GPUEntry('H100',          3.95, 80)
+    T4            = GPUEntry('T4',            0.59,  16)
+    L4            = GPUEntry('L4',            0.80,  24)
+    A10           = GPUEntry('A10',           1.10,  24)
+    L40S          = GPUEntry('L40S',          1.95,  48)
+    A100_40GB     = GPUEntry('A100-40GB',     2.10,  40)
+    A100_80GB     = GPUEntry('A100-80GB',     2.50,  80)
+    RTX_PRO_6000  = GPUEntry('RTX-PRO-6000',  3.03,  96)
+    H100          = GPUEntry('H100',          3.95,  80)
     H200          = GPUEntry('H200',          4.54, 141)
     B200          = GPUEntry('B200',          6.25, 180)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         lines = [f'GPU variants (as of {self._updated}, from {self._source}):']
         for _, v in sorted(self.__class__.__dict__.items()):
             if isinstance(v, GPUEntry): lines.append(f'  {v.tag:<15} ${v.price:.2f}/hr  {v.vram:>3}GB')
         return '\n'.join(lines)
+
+    def _repr_html_(self) -> str:
+        entries = sorted((v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry)), key=lambda e:e.price)
+        return '<div style="display:flex;flex-wrap:wrap;gap:8px">' + ''.join(e._repr_html_() for e in entries) + '</div>'
+
 
 # %% ../nbs/03_gpu.ipynb #57a69cc7
 from fastcore.all import *
 
 # %% ../nbs/03_gpu.ipynb #ee7c12b9
 @patch
-def cheapest(self:GPU):  # GPUEntry of the cheapest GPU
+def cheapest(self:GPU) -> GPUEntry:
+    "Return the cheapest GPUEntry."
     return min((v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry)), key=lambda x: x.price)
+
+
+# %% ../nbs/03_gpu.ipynb #dced5eca
+from IPython.display import HTML
 
 # %% ../nbs/03_gpu.ipynb #1d05e561
 @patch
-def by_budget(self:GPU, max_phr:float):  # GPUEntry list for GPUs costing ≤ max_phr per hour
-    return [v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry) and v.price <= max_phr]
+def by_budget(self:GPU,
+    max_phr:float,  # Maximum price per hour
+) -> HTML:
+    "Return GPU cards costing ≤ `max_phr` per hour as HTML."
+    entries = sorted((v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry) and v.price <= max_phr), key=lambda e:e.price)
+    return HTML('<div style="display:flex;flex-wrap:wrap;gap:8px">' + ''.join(e._repr_html_() for e in entries) + '</div>')
+
 
 # %% ../nbs/03_gpu.ipynb #f69fdb43
 @patch
-def price_of(self:GPU, tag:str):  # GPUEntry for a given GPU tag
+def price_of(self:GPU,
+    tag:str,  # GPU tag, e.g. 'H100'
+) -> GPUEntry:
+    "Return the GPUEntry matching `tag`."
     for _,v in self.__class__.__dict__.items():
         if isinstance(v,GPUEntry) and v.tag==tag: return v
     tags = [v.tag for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry)]
     raise KeyError(f'{tag} not found — available: {tags}')
 
+
 # %% ../nbs/03_gpu.ipynb #849875a4
 @patch
-def tags(self:GPU) -> list[str]:  # all available GPU tags
+def tags(self:GPU) -> list[str]:
+    "Lists all available GPU tags"
     return [v.tag for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry)]
 
 # %% ../nbs/03_gpu.ipynb #1d7e5218
 @patch
-def most_expensive(self:GPU):  # GPUEntry of the most expensive GPU
+def most_expensive(self:GPU) -> GPUEntry:
+    "Return the most expensive GPUEntry."
     return max((v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry)), key=lambda x: x.price)
+
 
 # %% ../nbs/03_gpu.ipynb #36b7e73c
 @patch
-def by_vram(self:GPU, min_gb:int):  # GPUEntry list for GPUs with at least min_gb VRAM
-    return [v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry) and v.vram >= min_gb]
+def by_vram(self:GPU,
+    min_gb:int,  # Minimum VRAM in GB
+) -> HTML:
+    "Return GPU cards with ≥ `min_gb` VRAM as HTML."
+    entries = sorted((v for _,v in self.__class__.__dict__.items() if isinstance(v,GPUEntry) and v.vram >= min_gb), key=lambda e:e.price)
+    return HTML('<div style="display:flex;flex-wrap:wrap;gap:8px">' + ''.join(e._repr_html_() for e in entries) + '</div>')
+
