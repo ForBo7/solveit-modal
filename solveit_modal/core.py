@@ -10,8 +10,8 @@ __all__ = ['log', 'provision_sandbox', 'setup_ssh', 'link_remote_kernel', 'gpu_o
            'set_sticky', 'start_remote', 'stop_remote', 'unset_sticky']
 
 # %% ../nbs/00_core.ipynb #23c76ec0
-from .modal import *
-from .ipyfernel import *
+from .sandbox import *
+from .kernel import *
 
 # %% ../nbs/00_core.ipynb #3f7d798d
 from ipyfernel.core import *
@@ -71,7 +71,8 @@ def link_remote_kernel(
     log.info('✔ connected to remote kernel')
     if sticky: 
         set_sticky()
-        log.warning('! code will run remotely by default; run `%local unset_sticky` to run code locally')
+        log.warning('! code now runs remotely by default; run `%local unset_sticky()` to run code locally')
+    log.warning('! remote kernel environment has a different set of libraries installed')
 
 # %% ../nbs/00_core.ipynb #f2fd6ed6
 def gpu_on(
@@ -86,7 +87,7 @@ def gpu_on(
 
 # %% ../nbs/00_core.ipynb #7d2d9bae
 def gpu_off(
-      sb  # sandbox object from gpu_on
+      sb:modal.sandbox.Sandbox  # sandbox object from gpu_on
 ):
     "Restore local kernel, disconnect remote, and teardown sandbox. Must be called from a %%local cell."
     unset_sticky()
