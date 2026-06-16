@@ -21,6 +21,9 @@ class GPUEntry:
 # %% ../nbs/03_gpu.ipynb #e4fbc570
 from datetime import date
 
+# %% ../nbs/03_gpu.ipynb #52795829
+from fastcore.all import *
+
 # %% ../nbs/03_gpu.ipynb #b0304fde
 class GPU:
     _source = 'https://modal.com/pricing'
