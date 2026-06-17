@@ -94,6 +94,8 @@ To run code in this GPU enabled environment, use the `%remote` line
 magic or the `%%remote` cell magic.
 
 ``` python
+#%%remote <-- cell magic (remove # when actually using)
+!nvidia-smi
 ```
 
     Wed Jun 17 07:03:35 2026       
