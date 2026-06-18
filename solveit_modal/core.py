@@ -115,7 +115,7 @@ def gpu_on(
     sticky  :bool=False                # Set `True` to execute code remotely by default
 ) -> tuple:  # (sandbox, ssh)
     "Provision a GPU sandbox, wire up SSH, and hijack cells onto a remote kernel."
-    sb,host,port = provision_sandbox(app_name,pips,apts,vol_name,timeout,gpu,secrets=get_secrets() if secrets is None else secrets)
+    sb,host,port = provision_sandbox(app_name,pips,apts,vol_name,timeout,gpu,secrets=secrets or (get_secrets() if in_solveit() else {}))
     ssh = setup_ssh(sb,host,port)
     link_remote_kernel(ssh,host,port,sticky=sticky)
     return sb,ssh
