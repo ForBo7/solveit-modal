@@ -4,6 +4,6 @@ project:
 website:
   title: "solveit-modal"
   site-url: "https://ForBo7.github.io/solveit-modal"
-  description: "Give SolveIt Modal GPU access"
+  description: "Give SolveIt GPU access via Modal"
   repo-branch: main
   repo-url: "https://github.com/ForBo7/solveit-modal"

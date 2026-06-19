@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "solveit-modal"
 dynamic = ["version"]
-description = "Give SolveIt Modal GPU access"
+description = "Give SolveIt GPU access via Modal"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
 authors = [{name = "Salman Naqvi", email = "salmanaqvi+github@icloud.com"}]
-keywords = ['nbdev']
+keywords = ['nbdev', 'solveit', 'modal', 'gpu']
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
