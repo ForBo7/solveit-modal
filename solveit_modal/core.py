@@ -48,7 +48,7 @@ import json
 # %% ../nbs/00_core.ipynb #fa27abd5
 def get_secrets() -> dict[str,str]:
     "Secrets from solveit_settings.json."
-    with open('/app/data/solveit_settings.json') as f: return json.load(f)['secrets']
+    with open('/app/data/solveit_settings.json') as f: return json.load(f).get('secrets', {})
 
 # %% ../nbs/00_core.ipynb #1478cd87
 import modal
@@ -102,6 +102,7 @@ def link_remote_kernel(
         set_sticky()
         log.warning('! code now runs remotely by default; run `%local unset_sticky()` to run code locally')
     log.warning('! remote kernel environment has a different set of libraries installed')
+    log.warning('! view your Modal usage at modal.com/apps')
 
 # %% ../nbs/00_core.ipynb #c6e85f87
 def gpu_on(
